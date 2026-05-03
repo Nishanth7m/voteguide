@@ -1,0 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Outfit", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --color-primary: #1a56db;
+  --color-secondary: #0e9f6e;
+  --color-accent: #e3a008;
+  --color-dark-bg: #111827;
+}
+
+@layer base {
+  body {
+    @apply font-sans text-gray-900 bg-slate-50;
+  }
+
+  h1, h2, h3, h4, .font-display {
+    @apply font-display tracking-tight text-slate-900;
+  }
+
+  /* Technical style headers */
+  .tech-label {
+    @apply font-mono text-[10px] uppercase tracking-[0.2em] text-slate-400 font-medium;
+  }
+  body.high-contrast {
+    @apply bg-black text-white;
+    --dmk-primary: #ff0000;
+    --dmk-secondary: #000000;
+    --tvk-primary: #800000;
+    --tvk-secondary: #ffff00;
+  }
+  
+  body.high-contrast .bg-white {
+    @apply bg-black border-2 border-white;
+  }
+  
+  body.high-contrast .text-gray-600 {
+    @apply text-gray-200;
+  }
+
+  /* Specific party themed high contrast overrides */
+  body.high-contrast .party-card-dmk {
+    @apply border-4 border-[#ff0000];
+  }
+  body.high-contrast .party-card-tvk {
+    @apply border-4 border-[#ffff00];
+  }
+
+  body.large-text {
+    font-size: 1.125rem;
+  }
+
+  body.x-large-text {
+    font-size: 1.25rem;
+  }
+
+  /* Accessibility: Focus visible */
+  :focus-visible {
+    outline: 2px solid #1a56db;
+    outline-offset: 2px;
+  }
+}
+
+/* Animations respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

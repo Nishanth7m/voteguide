@@ -1,0 +1,40 @@
+{
+  "entities": {
+    "Session": {
+      "title": "Chat Session",
+      "description": "Stores user chat sessions and history.",
+      "type": "object",
+      "properties": {
+        "sessionId": {
+          "type": "string",
+          "description": "Unique UUID for the session."
+        },
+        "messages": {
+          "type": "array",
+          "description": "List of messages in the conversation."
+        },
+        "language": {
+          "type": "string",
+          "description": "Current language preference for this session."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when session was created."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when session was last updated."
+        }
+      },
+      "required": ["sessionId", "messages", "language", "createdAt", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "sessions/{sessionId}": {
+      "schema": "Session",
+      "description": "Collection of chat sessions."
+    }
+  }
+}

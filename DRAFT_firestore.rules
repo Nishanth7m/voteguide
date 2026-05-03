@@ -1,0 +1,61 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // --- Helpers ---
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isValidSession(data) {
+      return data.keys().hasAll(['sessionId', 'messages', 'language', 'createdAt', 'updatedAt'])
+        && data.keys().size() == 5
+        && data.sessionId is string && data.sessionId.size() <= 128
+        && data.messages is list && data.messages.size() <= 100
+        && data.language is string && data.language.size() <= 5
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    // --- Collections ---
+
+    match /sessions/{sessionId} {
+      // Allow individual session retrieval if you have the ID
+      allow get: if isValidId(sessionId);
+
+      // Create new session
+      allow create: if isValidId(sessionId)
+        && isValidSession(incoming())
+        && incoming().sessionId == sessionId
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+
+      // Update existing session (append messages or change language)
+      allow update: if isValidId(sessionId)
+        && isValidSession(incoming())
+        && incoming().sessionId == existing().sessionId
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && (
+          // Action: Add Message or Change Language
+          incoming().diff(existing()).affectedKeys().hasOnly(['messages', 'language', 'updatedAt'])
+        );
+      
+      // Disallow list to prevent scraping all sessions
+      allow list: if false;
+    }
+  }
+}

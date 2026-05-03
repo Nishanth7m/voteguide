@@ -1,0 +1,13 @@
+{
+  "name": "VoteGuide AI",
+  "description": "An award-winning interactive election process assistant powered by Gemini 1.5 Flash, featuring a polling locator, interactive timelines, and multi-language support.",
+  "requestFramePermissions": [
+    "geolocation"
+  ],
+  "majorCapabilities": [
+    "AI-powered Chat",
+    "Multi-language Translation",
+    "Text-to-Speech",
+    "Interactive Mapping"
+  ]
+}
